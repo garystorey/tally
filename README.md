@@ -15,7 +15,7 @@ In your web page:
 <script src="dist/tally.min.js"></script>
 <script>
 jQuery(function($) {
-  $.awesome(); // "awesome"
+  $("textarea").tally(); // Use default options
 });
 </script>
 ```
