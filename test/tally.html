@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tally Test Suite</title>
+
+  <style>
+  .datatally { height:50px; width:200px;padding:5px 10px; margin:0;background-color:#111; color:#eee;}
+  </style>
+  <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+  <script src="../libs/jquery/jquery.js"></script>
+  <!-- Load local QUnit. -->
+  <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+  <script src="../libs/qunit/qunit.js"></script>
+  <!-- Load local lib and tests. -->
+  <script src="../src/tally.js"></script>
+  <script src="tally_test.js"></script>
+  <!-- Removing access to jQuery and $. But it'll still be available as _$, if
+       you REALLY want to mess around with jQuery in the console. REMEMBER WE
+       ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
+  <script>window._$ = jQuery.noConflict(true);</script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+  <textarea maxlength = "25" 
+  data-tally = '{
+    "tallyClass" : "datatally", 
+    "textfield" : { 
+      "warnAt" : 5,
+      "warningClass"  : "txtWarn"
+    }, 
+    "tallyID" : "tallyID2", 
+    "zIndex" : 150, 
+    "warningClass" : "warningClass3" , 
+    "tallyPattern" : "{{m}}/{{c}} ({{w}}) {{p}}%", 
+    "position" : { 
+      "x" : "left", 
+      "offsetX" : 2, 
+      "y" : "top", 
+      "offsetY" : 2 
+    }
+  }' name="test" id="testTextArea">this is the text</textarea>
+  </div>
+</body>
+</html>

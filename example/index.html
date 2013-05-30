@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf8'/>
+	<style>
+	* {box-sizing: border-box;}
+	.container {margin:50px;padding:10px;border:1px solid #ddd;background-color:#eee;}
+	.tally {background-color:#ccc; color:#111; padding:3px 5px;}
+	.warningClass {background-color:#B00B1E; color:#eee; }
+	.txtwarningClass {background-color:#ccffff; color:#333; }
+
+	</style>
+	<title>TallyJS Example</title>
+</head>
+<body>
+	<div class="container">
+	<label>
+		<div>Enter your text below:</div>
+		<textarea name="test" id="test" maxlength="100"></textarea>
+	</label>
+	<label>
+		<div>Enter your text below:</div>
+		<textarea name="test2" id="test2" maxlength="25"></textarea>
+	</label>
+	</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js">
+</script>
+<script src="../dist/tally.min.js"></script>
+<Script>
+	$("textarea").tally();
+</script>
+
+</body>
+</html>

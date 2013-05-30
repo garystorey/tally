@@ -1,0 +1,27 @@
+{
+  "name": "tally",
+  "title": "Tally",
+  "description": "A character/word counting plugin with many options",
+  "version": "0.5.0",
+  "homepage": "",
+  "author": {
+    "name": "Gary Storey",
+    "email": "garystorey@gmail.com",
+    "url": "http://garystorey.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github/garystorey/tally.git"
+  },
+  "bugs": "",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": ["textfield","textarea","input","count","tally","counter","text","textcounter"]
+}
