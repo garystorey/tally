@@ -1,4 +1,4 @@
-/*! Tally - v0.5.0 - 2013-05-30
+/*! Tally - v0.5.0 - 2013-05-31
 * Copyright (c) 2013 Gary Storey; Licensed MIT */
 (function($) {
 'use strict';

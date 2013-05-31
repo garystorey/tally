@@ -211,6 +211,7 @@ jQuery.fn.tally = function( options ) {
   }
 };
 
+
 jQuery.fn.tally.defaults = {
   tallyID : 'tallyID',
 	tallyClass : 'tally',

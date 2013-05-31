@@ -24,7 +24,8 @@ jQuery(function($) {
 _(Coming soon)_
 
 ## Examples
-_(Coming soon)_
+You can check out a [simple example][example].
+[example]: https://raw.github.com/gary/tally/master/example/index.html
 
 ## Release History
-_(Nothing yet)_
+*v0.5.0 - Intial Commit - not production ready
