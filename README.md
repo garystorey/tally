@@ -25,7 +25,7 @@ _(Coming soon)_
 
 ## Examples
 You can check out a [simple example][example].
-[example]: https://github.com/garystorey/tally/master/example/index.html
+[example]: http://htmlpreview.github.com/?https://raw.github.com/garystorey/tally/master/example/index.html
 
 ## Release History
 *v0.5.0 - Intial Commit - not production ready
