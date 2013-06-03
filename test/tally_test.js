@@ -134,12 +134,12 @@
   });
 
   test('On focus?', function() {
-    var txtString = '25/9 (4) 84%';
+    var txtString = '25/09 (4) 64%';
     this.elems.tally().trigger('focusin.tally');
     strictEqual(this.el.css('display'), 'block', 'Tally object is visible on focus');
     ok(this.el.hasClass('datatally'), 'Tally object has correct class on focus');
     strictEqual(this.el.css('z-index'),'150', 'Tally object has z-index set correctly on focus');
-    strictEqual(this.el.text(), txtString, 'Tally shows length of textarea.')  ;
+    strictEqual(this.el.find('.tallyText').text(), txtString, 'Tally shows length of textarea.')  ;
   });    
 
   test('On blur?', function() {
@@ -147,7 +147,7 @@
     strictEqual(this.el.css('display'),'none', 'Tally object is NOT visible on blur');
     ok(!this.el.hasClass('datatally'), 'Tally object does not have class on blur');
     strictEqual(this.el.css('z-index'),'auto', 'Tally object has default z-index set correctly on blur');
-    strictEqual(this.el.text(),'','Tally no longer shows length of textarea on blur.')  ;
+    strictEqual(this.el.find('.tallyText').text(),'','Tally no longer shows length of textarea on blur.')  ;
   });
 
   test('Is positioned?', function() {
@@ -160,7 +160,7 @@
   });
 
   test('Tally updates correctly?', function() {
-    var txtString = '25/4 (5) 80%';
+    var txtString = '25/04 (5) 84%';
     this.elems.on('tallyWarning', function(){ ok(true,'tallyWarning Event fired'); })
       .on('tallyPass', function(){ ok(true,'tallyPass Event fired'); });
 

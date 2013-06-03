@@ -1,11 +1,11 @@
 (function($) {
 'use strict';
-var Tally = function( $elm, options ) {
+var Tally = function( elm, options ) {
 
 	this.debug = false;
-	this.$el = ($elm) ? $elm :$("textarea");
+  this.el = elm;
+	this.$el = $(elm);
 	this.init( options );
-
 };
 
 Tally.prototype = {
@@ -36,44 +36,45 @@ Tally.prototype = {
   _bindEvents : function() {
     var self = this,
         opts = self.options,
-        $t = self.$tally,
         evts = self._events;
     
-    this.$el.on( evts , function ( evt ) {
+    self.$el.on( evts , function ( evt ) {
       switch( evt.type ) {
 
         case 'focusin':
-          $t.addClass( opts.tallyClass )
+          self.$tally.addClass( opts.tallyClass )
             .css({ 'position':'absolute', 'zIndex':opts.zIndex })
             .show()
-            .text( self._buildText() );
-            self._setXY();
+            .find('.tallyText').text( self._buildText() );
+          self._setXY();
           break;
 
         case 'focusout':
-          $t.removeClass( opts.tallyClass )
+          self.$tally.removeClass( opts.tallyClass )
+            .removeClass( opts.warningClass )
             .css({ 'position':'static', 'zIndex':'auto' })
             .hide()
-            .text('');
+            .find('.tallyText').text('');
           break;
 
         default:
-          $t.text( self._buildText() );
+         self.$tally.find('.tallyText').text( self._buildText() );
       }
+      self._updateClasses( evt.target );
     });
   },
 
-  _updateClasses : function (len) {
-    if ( this.options.textfield.warnAt >= len ) {
-      if (!this.$el.hasClass( this.options.textfield.warningClass )) {
-        this.$el.addClass( this.options.textfield.warningClass );
+  _updateClasses : function ( el ) {
+    if ( this.options.textfield.warnAt >= this._countChars() ) {
+      if (!this.$tally.hasClass( this.options.warningClass )) {
+        $(el).addClass( this.options.textfield.warningClass );
         this.$tally.addClass( this.options.warningClass );
         this.$el.trigger('tallyWarning');
       }
 
     } else {
-      if (this.$el.hasClass( this.options.textfield.warningClass )) {
-        this.$el.removeClass( this.options.textfield.warningClass );
+      if (this.$tally.hasClass( this.options.warningClass )) {
+        $(el).removeClass( this.options.textfield.warningClass );
         this.$tally.removeClass( this.options.warningClass );
         this.$el.trigger('tallyPass');
       }
@@ -82,17 +83,16 @@ Tally.prototype = {
 
   _buildText : function() {
       var pattern = this.options.tallyPattern,
-          count = this._countWords();
-      return pattern.replace('{{c}}', this._countChars())
+          words = this._countWords(),
+          count = this._pad( this._countChars() );
+      return pattern.replace('{{c}}', count )
               .replace('{{m}}', this.options.textfield.maxlength)
-              .replace('{{w}}', count)
+              .replace('{{w}}', words)
               .replace('{{p}}', this._getPercentage( count, this.options.textfield.maxlength ));
   },
 
   _countChars : function () {
-    var len = this.options.textfield.maxlength - this.$el.val().length;
-    this._updateClasses( len );
-    return len;
+    return this.options.textfield.maxlength - this.$el.val().length;
   },
 
   _getPercentage: function (curr,max) {
@@ -104,17 +104,21 @@ Tally.prototype = {
     if ( txt.match(/\S+/g) ) {
       return txt.match(/\S+/g).length;  
     }
-    return 0;
+    return (txt) ? 1 : 0;
   },
 
   _buildTallyObject : function () {
     var opts = this.options,
-        $t = $('#' + opts.tallyID); //shortcut name
+        $t = $('#' + opts.tallyID), //shortcut name
+        div,span;
 
     if ( !this._initialized  && $t.length === 0 ) {
-      this.$tally = $('<div/>', { 'id': opts.tallyID})
-        .hide()
-        .appendTo('body');
+
+      div = $('<div/>', { 'id': opts.tallyID}).hide();
+      span = $('<span/>', { 'class': opts.progressBarClass });
+      span.appendTo(div);
+      span= $('<span/>',{'class' : 'tallyText'}).appendTo(div);
+      div.appendTo('body');
       this._initialized = true;
     } else {
         this.$tally = $t;
@@ -185,6 +189,14 @@ if ( typeof posYo === "number" )     { y += parseInt( posYo, 10 ); }
 //Set the coordinates
 this.$tally.css( { top: y, left: x } );
 
+},
+
+_pad : function ( num ) {
+  var len = this.options.textfield.maxlength;
+  len = len.length; num = num + '';
+  while ( num.length < len ) { 
+    num = '0'+ num; }
+  return num;
 }
 
 
