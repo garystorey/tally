@@ -5,10 +5,42 @@
 	<style>
 	* {box-sizing: border-box;}
 	.container {margin:50px;padding:10px;border:1px solid #ddd;background-color:#eee;}
-	.tally {background-color:#ccc; color:#111; padding:3px 5px;}
-	.warningClass {background-color:#B00B1E; color:#eee; }
-	.txtwarningClass {background-color:#ccffff; color:#333; }
+	textarea {margin-bottom:30px;}
 
+	.tally {
+		text-shadow: 1px 1px 2px #ccc;font-weight:bold;
+        filter: dropshadow(color=#ccc, offx=1, offy=1);		
+		background-color:rgb(60,137,181);
+		color:#eee; padding:4px 8px; border-radius: 0 0 .5em .5em;
+		-webkit-box-shadow:  1px 1px 2px 0px #333;
+		box-shadow:  1px 1px 2px 0px #333;
+		background: #6ca3c8; /* Old browsers */
+		/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzZjYTNjOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM0NDc5YTIiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(top,  #6ca3c8 0%, #4479a2 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6ca3c8), color-stop(100%,#4479a2)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #6ca3c8 0%,#4479a2 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #6ca3c8 0%,#4479a2 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #6ca3c8 0%,#4479a2 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #6ca3c8 0%,#4479a2 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6ca3c8', endColorstr='#4479a2',GradientType=0 ); /* IE6-8 */
+	}
+
+	.tally-warningClass { color:#eee;
+		background: #cc0000; /* Old browsers */
+		/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2NjMDAwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjYzAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(top,  #cc0000 0%, #cc0000 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#cc0000)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #cc0000 0%,#cc0000 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #cc0000 0%,#cc0000 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #cc0000 0%,#cc0000 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #cc0000 0%,#cc0000 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0000', endColorstr='#cc0000',GradientType=0 ); /* IE6-8 */
+	}
+
+	.tally-txtWarningClass {background-color:#cc0000; color:#eee; }
+	
 	</style>
 	<title>TallyJS Example</title>
 </head>
@@ -20,7 +52,7 @@
 	</label>
 	<label>
 		<div>Enter your text below:</div>
-		<textarea name="test2" id="test2" maxlength="25"></textarea>
+		<textarea name="test2" id="test2" maxlength="25" data-tally='{"tallyPattern" : "{{c}}/{{m}}  {{p}}% ({{w}})"}'></textarea>
 	</label>
 	</div>
 
@@ -28,7 +60,7 @@
 </script>
 <script src="../src/tally.js"></script>
 <Script>
-	$("textarea").tally();
+	$("textarea").tally({"tallyPattern" : "{{p}}%"});
 </script>
 
 </body>

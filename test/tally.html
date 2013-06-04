@@ -26,21 +26,32 @@
   <textarea maxlength = "25" 
   data-tally = '{
     "tallyClass" : "datatally", 
+    "textClass" : "tallyTextClass",
     "textfield" : { 
       "warnAt" : 5,
       "warningClass"  : "txtWarn"
     }, 
     "tallyID" : "tallyID2", 
-    "zIndex" : 150, 
     "warningClass" : "warningClass3" , 
     "tallyPattern" : "{{m}}/{{c}} ({{w}}) {{p}}%", 
+    "showProgressBar" : true,
+    "progressBarClass" : "progressBar",
+    "setPosition" : true,
     "position" : { 
+      "zIndex" : 150, 
       "x" : "left", 
       "offsetX" : 2, 
       "y" : "top", 
       "offsetY" : 2 
     }
   }' name="test" id="testTextArea">this is the text</textarea>
-  </div>
+
+<textarea maxlength = "25"  id="testTextArea2" name="test"
+  data-tally = '{ "tallyClass" : "datatally", "tallyID" : "tallyID2", "showProgressBar" : false, "setPosition" : false}'>
+  this is the text
+</textarea>  
+
+</div>
+
 </body>
 </html>
