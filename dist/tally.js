@@ -1,10 +1,11 @@
-/*! Tally - v0.5.0 - 2013-06-04
+/*! Tally - v0.5.0 - 2013-06-07
 * Copyright (c) 2013 Gary Storey; Licensed MIT */
 (function($) {
 'use strict';
 var Tally = function( elm, options ) {
   this.el = elm;
 	this.$el = $(elm);
+  this._initialized = false;
 	this.init( options );
 };
 
@@ -12,10 +13,10 @@ Tally.prototype = {
 
   init : function ( options ) {
 
+    this.type = 'Tally';
     this._setOptions ( options );
     this.$el.data('Tally', this);
     this._events = 'focusin.tally focusout.tally keyup.tally keydown.tally input.tally paste.tally',
-    this._initialized = false;
     this._buildTallyObject();
     this._bindEvents();
 
@@ -38,7 +39,7 @@ Tally.prototype = {
     if ( isData) {
       this.options = $.extend( true, {}, this.options , isData );
     }
-    this.options.textfield.maxlength = (this.$el.attr("maxlength")) ? this.$el.attr("maxlength") : this.options.textfield.maxlength;
+    this.options.maxlength = ( this.$el.attr('maxlength') ) ? this.$el.attr('maxlength') - 0 : this.options.maxlength - 0;
   },
 
   _bindEvents : function() {
@@ -50,28 +51,28 @@ Tally.prototype = {
       switch( evt.type ) {
 
         case 'focusin':
-          self.$tally.addClass( opts.tallyClass )
-            .css({ 'position':'absolute', 'zIndex':opts.position.zIndex })
-            .show();
 
-          self.$tallyText.text( self._buildText() )
-            .css( {'position' : 'relative', 'zIndex' : opts.position.zIndex+2 });
-          
-          self.$tallyBar.css({ 'position' : 'relative', 'zIndex' : opts.position.zIndex+1 });
-
-          if ( opts.setPosition ) { self._setXY(); }
+          self.$tallyText.text( self._buildText() );
+          self.$tally.addClass( opts.classes.main );
+          if ( opts.setPosition ) { 
+            self.$tally.css({ 'position':'absolute', 'zIndex': opts.position.zIndex });
+            self.$tallyBar.css({ 'position' : 'relative', 'zIndex' : opts.position.zIndex + 1 });
+            self.$tallyText.css({ 'position' : 'relative', 'zIndex' : opts.position.zIndex + 2 });
+            self._setXY(); 
+          } 
+          self.$tally.show();
 
           break;
 
         case 'focusout':
-          self.$tally.removeClass( opts.tallyClass )
-            .removeClass( opts.warningClass )
-            .css({ 'position':'static', 'zIndex':'auto' })
-            .hide();
-          self.$tallyText.text('')
-            .css({ 'position':'static', 'zIndex':'auto' });
+          self.$tally.removeClass( opts.classes.main + ' ' + opts.classes.warning ).hide();
+          self.$tallyText.text('');
 
-          self.$tallyBar.css({ 'position':'static', 'zIndex':'auto' });
+          if ( opts.setPosition ) { 
+            self.$tally.css({ 'position':'static', 'zIndex':'auto' });
+            self.$tallyText.css({ 'position':'static', 'zIndex':'auto' });
+            self.$tallyBar.css({ 'position':'static', 'zIndex':'auto' });
+          }
 
           break;
 
@@ -91,46 +92,54 @@ Tally.prototype = {
 
   _fireEvent : function ( type ) {
     var evt = ( type === 'warning') ? 'tallyWarning' : 'tallyPass';
-    if ( this.$tally.hasClass( this.options.warningClass )) {
+    if ( this.$tally.hasClass( this.options.classes.warning )) {
         this.$el.trigger( evt );
     }
   },
 
   _updateClasses : function ( event ) {
     var el = event.target, etype = event.type;
-
-    if ( this.options.textfield.warnAt >= this._countChars() ) {
-      $(el).addClass( this.options.textfield.warningClass );
-      this.$tally.addClass( this.options.warningClass );
-      this._fireEvent('warning');
-    } else {
-      $(el).removeClass( this.options.textfield.warningClass );
-      this.$tally.removeClass( this.options.warningClass );
-      this._fireEvent('pass');
-    }
     if ( etype === 'focusout') {
-      $(el).removeClass( this.options.textfield.warningClass );
+      $(el).removeClass( this.options.classes.field );
     }
+
+    if ( this.options.warnAt < this._countChars() ) {
+      $(el).removeClass( this.options.classes.field );
+      if( this.$tally.hasClass( this.options.classes.warning )){
+        this._fireEvent('pass');
+      }
+      this.$tally.removeClass( this.options.classes.warning );
+      return;
+    }
+
+    $(el).addClass( this.options.classes.field );
+    if(! this.$tally.hasClass( this.options.classes.warning )){
+      this._fireEvent('warning');
+    }
+    this.$tally.addClass( this.options.classes.warning );
+    return;
   },
 
   _buildText : function() {
-      var pattern = this.options.tallyPattern,
+      var pattern = this.options.pattern,
           words = this._countWords(),
           count = this._pad( this._countChars() ),
-          percent = this._getPercentage( count, this.options.textfield.maxlength );
+          percent = this._getPercentage( count, this.options.maxlength );
 
-      return pattern.replace('{{c}}', count )
-              .replace('{{m}}', this.options.textfield.maxlength)
-              .replace('{{w}}', words)
-              .replace('{{p}}', this._pad(percent,3));
+      pattern = pattern.replace('{{c}}', count )
+        .replace('{{m}}', this.options.maxlength)
+        .replace('{{w}}', words)
+        .replace('{{p}}', this._pad(percent,3));
+
+      return pattern;
   },
 
   _countChars : function () {
-    return this.options.textfield.maxlength - this.$el.val().length;
+    return this.options.maxlength - this.$el.val().length;
   },
 
   _getPercentage: function (curr,max) {
-    return 100 - ( parseInt( Math.floor( (curr / max) * 100 ) ,10 ) );
+    return 100 - ( parseInt( Math.floor( (curr / max) * 100 ) , 10 ) );
   },
 
   _countWords : function () {
@@ -143,19 +152,19 @@ Tally.prototype = {
 
   _buildTallyObject : function () {
     var opts = this.options,
-        $t = $('#' + opts.tallyID), //shortcut name
+        $t = $('#' + opts.id), //shortcut name
         div,span;
 
     if ( !this._initialized  && $t.length === 0 ) {
 
-      div = $('<div/>', { 'id': opts.tallyID}).hide();
+      div = $('<div/>', { 'id': opts.id}).hide();
       this.$tally = div;
 
-      span = $('<span/>', { 'class': opts.progressBarClass, 'display':'block' });
+      span = $('<span/>', { 'class': opts.classes.progressBar, 'display':'block' });
       span.appendTo(div);
       this.$tallyBar = span;
 
-      span= $('<span/>',{'class' : opts.textClass, 'display':'block' }).appendTo(div);
+      span= $('<span/>',{'class' : opts.classes.text, 'display':'block' }).appendTo(div);
       div.appendTo('body');
       this.$tallyText = span;
 
@@ -164,8 +173,8 @@ Tally.prototype = {
     } else {
       
       this.$tally = $t;
-      this.$tallyText = $t.find('.'+ opts.textClass);
-      this.$tallyBar = $t.find('.'+ opts.progressBarClass);
+      this.$tallyText = $t.find('.'+ opts.classes.text);
+      this.$tallyBar = $t.find('.'+ opts.classes.progressBar);
 
     }
   },
@@ -227,9 +236,11 @@ this.$tally.css( { top: y, left: x } );
 },
 
 _pad : function ( num, len, achar ) {
-  len = len || this.options.textfield.maxlength.length;
-  achar = achar || 0;
+  var tmp = this.options.maxlength + '';
+  len = len || tmp.length;
+  achar = achar || '0';
   num = num + '';
+
   while ( num.length < len ) { 
     num = achar + num; 
   }
@@ -262,21 +273,20 @@ jQuery.fn.tally = function( options ) {
 
 jQuery.fn.tally.defaults = {
 
-  tallyID : 'tallyID',
-	tallyClass : 'tally',
-  textClass : 'tally-text',
-  tallyPattern : '{{c}}/{{m}}',
-  warningClass : 'tally-warningClass',
-  
+  id : 'tally',
+  pattern : '{{c}}/{{m}}',
   showProgressBar : true,
-  progressBarClass : 'tally-progressBar',
-  
-  textfield : {
-    warnAt : 10,
-    maxlength : 256,
-    warningClass : 'tally-txtWarningClass'
+  warnAt : 10,
+  maxlength : 256,
+
+  classes : {
+    main : 'tally',
+    text : 'tally-text',
+    progressBar : 'tally-progressBar',
+    warning : 'tally-warning',
+    field : 'tally-fieldWarning'
   },
-  
+
   setPosition : true,
   position : {
     zIndex : 100,
