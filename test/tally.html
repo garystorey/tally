@@ -25,17 +25,17 @@
   <div id="qunit-fixture">
   <textarea maxlength = "25" 
   data-tally = '{
-    "tallyClass" : "datatally", 
-    "textClass" : "tallyTextClass",
-    "textfield" : { 
-      "warnAt" : 5,
-      "warningClass"  : "txtWarn"
-    }, 
-    "tallyID" : "tallyID2", 
-    "warningClass" : "warningClass3" , 
-    "tallyPattern" : "{{m}}/{{c}} ({{w}}) {{p}}%", 
+    "id" : "tallyID2", 
+    "pattern" : "{{m}}/{{c}} ({{w}}) {{p}}%", 
     "showProgressBar" : true,
-    "progressBarClass" : "progressBar",
+    "warnAt" : 5,
+    "classes" : {
+      "main" : "datatally",
+      "text" : "tallyTextClass",
+      "warning" : "warningClass3",
+      "progressBar" : "progressBar"  ,
+      "field" : "txtWarn"    
+    },
     "setPosition" : true,
     "position" : { 
       "zIndex" : 150, 
@@ -47,7 +47,7 @@
   }' name="test" id="testTextArea">this is the text</textarea>
 
 <textarea maxlength = "25"  id="testTextArea2" name="test"
-  data-tally = '{ "tallyClass" : "datatally", "tallyID" : "tallyID2", "showProgressBar" : false, "setPosition" : false}'>
+  data-tally = '{ "tallyClass" : "datatally", "id" : "tallyID2", "showProgressBar" : false, "setPosition" : false}'>
   this is the text
 </textarea>  
 

@@ -47,18 +47,17 @@
   test('defaults are set?', function() {
     var msg = ' default has been set';
 
-    strictEqual($.fn.tally.defaults.tallyClass,'tally', 'tallyClass' + msg);
-    strictEqual($.fn.tally.defaults.warningClass,'tally-warningClass', 'warningClass' + msg);
-    strictEqual($.fn.tally.defaults.tallyID,'tallyID', 'tallyID' + msg);
-    strictEqual($.fn.tally.defaults.tallyPattern,'{{c}}/{{m}}', 'tallyPattern' + msg);
-    strictEqual($.fn.tally.defaults.textClass,'tally-text', 'tallyText' + msg);
-
+    strictEqual($.fn.tally.defaults.id,'tally', 'id' + msg);
+    strictEqual($.fn.tally.defaults.pattern,'{{c}}/{{m}}', 'pattern' + msg);
     strictEqual($.fn.tally.defaults.showProgressBar,true, 'showProgressBar' + msg);
-    strictEqual($.fn.tally.defaults.progressBarClass,'tally-progressBar', 'progressBarClass' + msg);
+    strictEqual($.fn.tally.defaults.warnAt,10, 'warnAt' + msg);
+    strictEqual($.fn.tally.defaults.maxlength,256, 'maxlength' + msg);
 
-    strictEqual($.fn.tally.defaults.textfield.warnAt,10, 'textfield: warnAt' + msg);
-    strictEqual($.fn.tally.defaults.textfield.maxlength,256, 'textfield: maxlength' + msg);
-    strictEqual($.fn.tally.defaults.textfield.warningClass,'tally-txtWarningClass', 'textfield: warningClass' + msg);
+    strictEqual($.fn.tally.defaults.classes.main,'tally', 'classes.main' + msg);
+    strictEqual($.fn.tally.defaults.classes.text,'tally-text', 'tallyText' + msg);
+    strictEqual($.fn.tally.defaults.classes.warning,'tally-warning', 'classes.warning' + msg);
+    strictEqual($.fn.tally.defaults.classes.progressBar,'tally-progressBar', 'classes.progressBar' + msg);
+    strictEqual($.fn.tally.defaults.classes.field,'tally-fieldWarning', 'classes.field' + msg);
 
     strictEqual($.fn.tally.defaults.setPosition, true, 'setPosition' + msg);
 
@@ -71,55 +70,57 @@
   });
 
   test('defaults can be changed?', function() {
-    var msg = ' can be changed.';
+    var msg = ' can be changed.', txt = 'changed', num = 999;
 
-    $.fn.tally.defaults.tallyClass = 'tally2';
-    strictEqual($.fn.tally.defaults.tallyClass, 'tally2', 'tallyClass' + msg);
 
-    $.fn.tally.defaults.warningClass = 'warningClass2';
-    strictEqual($.fn.tally.defaults.warningClass, 'warningClass2', 'warningClass' + msg);
+    $.fn.tally.defaults.id = txt;
+    strictEqual($.fn.tally.defaults.id, txt, 'id' + msg);
 
-    $.fn.tally.defaults.tallyID = 'tally2';
-    strictEqual($.fn.tally.defaults.tallyID, 'tally2', 'tallyID' + msg);
-
-    $.fn.tally.defaults.tallyPattern = '{{m}}';
-    strictEqual($.fn.tally.defaults.tallyPattern, '{{m}}', 'tallyPattern' + msg);
-
-    $.fn.tally.defaults.textClass = 'txt-tally';
-    strictEqual($.fn.tally.defaults.textClass, 'txt-tally', 'textClass' + msg);
+    $.fn.tally.defaults.pattern = txt;
+    strictEqual($.fn.tally.defaults.pattern, txt, 'pattern' + msg);
 
     $.fn.tally.defaults.showProgressBar = false;
     strictEqual($.fn.tally.defaults.showProgressBar, false, 'showProgressBar' + msg);
 
-    $.fn.tally.defaults.progressBarClass = 'pb';
-    strictEqual($.fn.tally.defaults.progressBarClass, 'pb', 'progressBarClass' + msg);
+    $.fn.tally.defaults.warnAt = num;
+    strictEqual($.fn.tally.defaults.warnAt, num, 'warnAt' + msg);
 
-    $.fn.tally.defaults.textfield.warnAt = 15;
-    strictEqual($.fn.tally.defaults.textfield.warnAt, 15, 'textfield: warnAt' + msg);
+    $.fn.tally.defaults.maxlength = num;
+    strictEqual($.fn.tally.defaults.maxlength, num, 'maxlength' + msg);
 
-    $.fn.tally.defaults.textfield.maxlength = 50;
-    strictEqual($.fn.tally.defaults.textfield.maxlength, 50, 'textfield: maxlength' + msg);
+    $.fn.tally.defaults.classes.main = txt;
+    strictEqual($.fn.tally.defaults.classes.main, txt, 'classes.main' + msg);
 
-    $.fn.tally.defaults.textfield.warningClass = 'textfieldWarning';
-    strictEqual($.fn.tally.defaults.textfield.warningClass, 'textfieldWarning', 'textfield: warningClass' + msg);
+    $.fn.tally.defaults.classes.text = txt;
+    strictEqual($.fn.tally.defaults.classes.text, txt, 'classes.text' + msg);
+
+    $.fn.tally.defaults.classes.progressBar = txt;
+    strictEqual($.fn.tally.defaults.classes.progressBar, txt, 'classes.progressBar' + msg);
+
+    $.fn.tally.defaults.classes.warning = txt;
+    strictEqual($.fn.tally.defaults.classes.warning, txt, 'classes.warning' + msg);
+
+    $.fn.tally.defaults.classes.field = txt;
+    strictEqual($.fn.tally.defaults.classes.field, txt, 'classes.field' + msg);
+
 
     $.fn.tally.defaults.setPosition = false;
     strictEqual($.fn.tally.defaults.setPosition, false, 'setPosition' + msg);
 
-    $.fn.tally.defaults.position.zIndex = 50;
-    strictEqual($.fn.tally.defaults.position.zIndex, 50, 'zIndex' + msg);
+    $.fn.tally.defaults.position.zIndex = num;
+    strictEqual($.fn.tally.defaults.position.zIndex, num, 'zIndex' + msg);
 
-    $.fn.tally.defaults.position.x = 'center';
-    strictEqual($.fn.tally.defaults.position.x, 'center', 'position: x' + msg);
+    $.fn.tally.defaults.position.x = txt;
+    strictEqual($.fn.tally.defaults.position.x, txt, 'position: x' + msg);
 
-    $.fn.tally.defaults.position.offsetX = 1;
-    strictEqual($.fn.tally.defaults.position.offsetX, 1, 'position: offsetX' + msg);
+    $.fn.tally.defaults.position.offsetX = num;
+    strictEqual($.fn.tally.defaults.position.offsetX, num, 'position: offsetX' + msg);
 
-    $.fn.tally.defaults.position.y = 'middle';
-    strictEqual($.fn.tally.defaults.position.y, 'middle', 'position: y' + msg);
+    $.fn.tally.defaults.position.y = txt;
+    strictEqual($.fn.tally.defaults.position.y, txt, 'position: y' + msg);
 
-    $.fn.tally.defaults.position.offsetY = 1;
-    strictEqual($.fn.tally.defaults.position.offsetY, 1, 'position: offsetY' + msg);
+    $.fn.tally.defaults.position.offsetY = num;
+    strictEqual($.fn.tally.defaults.position.offsetY, num, 'position: offsetY' + msg);
 
   });
 
@@ -131,25 +132,25 @@
     this.elem2.tally();
 
     //Need to test each property as it is added here
+    var e1d = this.elem1.data('Tally');
 
-    strictEqual(this.elem1.data('Tally').options.tallyClass, 'datatally','tallyClass' + msg);
-    strictEqual(this.elem1.data('Tally').options.tallyID, 'tallyID2','tallyID' + msg);
-    strictEqual(this.elem1.data('Tally').options.warningClass, 'warningClass3','warningClass' + msg);
-    strictEqual(this.elem1.data('Tally').options.tallyPattern, txtString,'tallyPattern' + msg);
-    strictEqual(this.elem1.data('Tally').options.textClass, 'tallyTextClass','textClass' + msg);
-
+    strictEqual(e1d.options.id, 'tallyID2','id' + msg);
+    strictEqual(e1d.options.pattern, txtString,'pattern' + msg);
     strictEqual(this.elem2.data('Tally').options.showProgressBar, false,'showProgressBar' + msg);
-    strictEqual(this.elem1.data('Tally').options.progressBarClass, 'progressBar','progressBarClass' + msg);
+    strictEqual(e1d.options.warnAt, 5,'warnAt' + msg);
 
-    strictEqual(this.elem1.data('Tally').options.textfield.warnAt, 5,'textfield: warnAt' + msg);
-    strictEqual(this.elem1.data('Tally').options.textfield.warningClass, 'txtWarn','textfield: warningClass' + msg);
+    strictEqual(e1d.options.classes.main, 'datatally','classes.main' + msg);
+    strictEqual(e1d.options.classes.text, 'tallyTextClass','classes.text' + msg);
+    strictEqual(e1d.options.classes.progressBar, 'progressBar','classes.progressBar' + msg);
+    strictEqual(e1d.options.classes.warning, 'warningClass3','classes.warning' + msg);
+    strictEqual(e1d.options.classes.field, 'txtWarn','classes.field' + msg);
 
-    strictEqual(this.elem1.data('Tally').options.setPosition, true,'setPosition' + msg);
-    strictEqual(this.elem1.data('Tally').options.position.zIndex, 150,'position: zIndex' + msg);
-    strictEqual(this.elem1.data('Tally').options.position.x, 'left','position: X' + msg);
-    strictEqual(this.elem1.data('Tally').options.position.offsetX, 2,'position: offsetX' + msg);
-    strictEqual(this.elem1.data('Tally').options.position.y, 'top','position: y' + msg);
-    strictEqual(this.elem1.data('Tally').options.position.offsetY, 2,'position: offsetY' + msg);
+    strictEqual(e1d.options.setPosition, true,'setPosition' + msg);
+    strictEqual(e1d.options.position.zIndex, 150,'position: zIndex' + msg);
+    strictEqual(e1d.options.position.x, 'left','position: X' + msg);
+    strictEqual(e1d.options.position.offsetX, 2,'position: offsetX' + msg);
+    strictEqual(e1d.options.position.y, 'top','position: y' + msg);
+    strictEqual(e1d.options.position.offsetY, 2,'position: offsetY' + msg);
 
   });
 
@@ -182,12 +183,12 @@
   });
 
   test('Is positioned?', function() {
-    var top = 0, left = 0 ,el=$("#tallyID2");
+    var top = 0, left = 0 , el = $('#tallyID2');
     this.elem1.tally().trigger('focusin.tally');
-    top = this.elem1.offset().top - el.outerHeight() -8 + 2 +'px';
+    top = this.elem1.offset().top - el.outerHeight() - 8 + 2 +'px';
     left = this.elem1.offset().left + 2 +'px';
-    strictEqual( el.css("top"), top , 'Y coordinate is correct');
-    strictEqual( el.css("left"), left , 'X coordinate is correct');
+    strictEqual( el.css('top'), top , 'Y coordinate is correct');
+    strictEqual( el.css('left'), left , 'X coordinate is correct');
   });
 
   test('Tally updates correctly?', function() {
@@ -206,3 +207,4 @@
   });
 
  }(jQuery));
+
