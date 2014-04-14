@@ -52,7 +52,7 @@
 	</label>
 	<label>
 		<div>Enter your text below:</div>
-		<textarea name="test2" id="test2" maxlength="25" data-tally='{"tallyPattern" : "{{c}}/{{m}}  {{p}}% ({{w}})"}'></textarea>
+		<textarea name="test2" id="test2" maxlength="25" data-tally='{"countDirection" : "down" , "pattern" : "{{c}}/{{m}}  {{p}}% ({{w}})"}'></textarea>
 	</label>
 	</div>
 
@@ -60,7 +60,7 @@
 </script>
 <script src="../src/tally.js"></script>
 <Script>
-	$("textarea").tally({"tallyPattern" : "{{p}}%"});
+	$("textarea").tally({"pattern" : "{{p}}%"});
 </script>
 
 </body>

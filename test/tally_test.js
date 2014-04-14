@@ -52,6 +52,7 @@
     strictEqual($.fn.tally.defaults.showProgressBar,true, 'showProgressBar' + msg);
     strictEqual($.fn.tally.defaults.warnAt,10, 'warnAt' + msg);
     strictEqual($.fn.tally.defaults.maxlength,256, 'maxlength' + msg);
+    strictEqual($.fn.tally.defaults.countDirection,'up', 'countDirection' + msg);
 
     strictEqual($.fn.tally.defaults.classes.main,'tally', 'classes.main' + msg);
     strictEqual($.fn.tally.defaults.classes.text,'tally-text', 'tallyText' + msg);
@@ -87,6 +88,9 @@
 
     $.fn.tally.defaults.maxlength = num;
     strictEqual($.fn.tally.defaults.maxlength, num, 'maxlength' + msg);
+
+    $.fn.tally.defaults.countDirection = txt;
+    strictEqual($.fn.tally.defaults.countDirection, txt, 'countDirection' + msg);
 
     $.fn.tally.defaults.classes.main = txt;
     strictEqual($.fn.tally.defaults.classes.main, txt, 'classes.main' + msg);
@@ -138,6 +142,7 @@
     strictEqual(e1d.options.pattern, txtString,'pattern' + msg);
     strictEqual(this.elem2.data('Tally').options.showProgressBar, false,'showProgressBar' + msg);
     strictEqual(e1d.options.warnAt, 5,'warnAt' + msg);
+    strictEqual(e1d.options.countDirection, 'down','countDirection' + msg);
 
     strictEqual(e1d.options.classes.main, 'datatally','classes.main' + msg);
     strictEqual(e1d.options.classes.text, 'tallyTextClass','classes.text' + msg);
