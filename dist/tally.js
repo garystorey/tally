@@ -1,5 +1,3 @@
-/*! Tally - v0.5.0 - 2013-06-07
-* Copyright (c) 2013 Gary Storey; Licensed MIT */
 (function($) {
 'use strict';
 var Tally = function( elm, options ) {
@@ -12,34 +10,30 @@ var Tally = function( elm, options ) {
 Tally.prototype = {
 
   init : function ( options ) {
-
     this.type = 'Tally';
     this._setOptions ( options );
     this.$el.data('Tally', this);
-    this._events = 'focusin.tally focusout.tally keyup.tally keydown.tally input.tally paste.tally',
+    this._events = 'focusin.tally focusout.tally keyup.tally keydown.tally input.tally paste.tally';
     this._buildTallyObject();
     this._bindEvents();
-
     return this.$el;
   },
 
   destroy : function () {
-
     if ( this._initialized ) {
         this.$tally.remove();
         this.$tally = undefined;
         this.$el.off('.tally');
     }
-
   },
 
   _setOptions : function ( options ) {
     var isData = this.$el.data('tally');
     this.options = $.extend( true, {}, $.fn.tally.defaults, options );
-    if ( isData) {
-      this.options = $.extend( true, {}, this.options , isData );
-    }
+    if ( isData) { this.options = $.extend( true, {}, this.options , isData ); }
     this.options.maxlength = ( this.$el.attr('maxlength') ) ? this.$el.attr('maxlength') - 0 : this.options.maxlength - 0;
+    this.options.countDirection = this.options.countDirection.toLowerCase();
+    if ( 'updown'.indexOf( this.options.countDirection ) === -1 ) { this.options.countDirection = 'up'; }
   },
 
   _bindEvents : function() {
@@ -97,27 +91,47 @@ Tally.prototype = {
     }
   },
 
+  _hasWarning : function () {
+    return (this.$tally.hasClass( this.options.classes.warning ));
+  },
+
   _updateClasses : function ( event ) {
-    var el = event.target, etype = event.type;
+
+    var el = event.target, etype = event.type,
+    warn = this.options.warnAt, dir = this.options.countDirection,
+    count = this._countChars(), max = this.options.maxlength;
+
     if ( etype === 'focusout') {
       $(el).removeClass( this.options.classes.field );
     }
 
-    if ( this.options.warnAt < this._countChars() ) {
+    if ( dir === 'up' && count < ( max - warn ) ) {
+      if( this._hasWarning() ) { this._fireEvent('pass'); }
       $(el).removeClass( this.options.classes.field );
-      if( this.$tally.hasClass( this.options.classes.warning )){
-        this._fireEvent('pass');
-      }
       this.$tally.removeClass( this.options.classes.warning );
       return;
     }
 
-    $(el).addClass( this.options.classes.field );
-    if(! this.$tally.hasClass( this.options.classes.warning )){
-      this._fireEvent('warning');
+    if (dir === 'up' && count >= ( max - warn ) ) {
+      if(! this._hasWarning() ){ this._fireEvent('warning'); }
+      $(el).addClass( this.options.classes.field );
+      this.$tally.addClass( this.options.classes.warning );
+      return;
     }
-    this.$tally.addClass( this.options.classes.warning );
-    return;
+
+    if ( dir === 'down' && count <= warn ) {
+      if(! this._hasWarning() ){ this._fireEvent('warning'); }
+      $(el).addClass( this.options.classes.field );
+      this.$tally.addClass( this.options.classes.warning );
+      return;
+    }
+    
+    if (dir === 'down' && count >= warn ) {
+      if( this._hasWarning() ) { this._fireEvent('pass'); }
+      $(el).removeClass( this.options.classes.field );
+      this.$tally.removeClass( this.options.classes.warning );
+      return;
+    }
   },
 
   _buildText : function() {
@@ -135,11 +149,11 @@ Tally.prototype = {
   },
 
   _countChars : function () {
-    return this.options.maxlength - this.$el.val().length;
+    return (this.options.countDirection === 'down') ? this.options.maxlength - this.$el.val().length : this.$el.val().length;
   },
 
   _getPercentage: function (curr,max) {
-    return 100 - ( parseInt( Math.floor( (curr / max) * 100 ) , 10 ) );
+    return (this.options.countDirection === 'down') ? 100 - ( parseInt( Math.floor( (curr / max) * 100 ) , 10 ) ) : parseInt( Math.floor( (curr / max) * 100 ) , 10 );
   },
 
   _countWords : function () {
@@ -247,7 +261,6 @@ _pad : function ( num, len, achar ) {
   return num;
 }
 
-
 };
 
 jQuery.fn.tally = function( options ) {
@@ -270,7 +283,6 @@ jQuery.fn.tally = function( options ) {
   }
 };
 
-
 jQuery.fn.tally.defaults = {
 
   id : 'tally',
@@ -278,6 +290,7 @@ jQuery.fn.tally.defaults = {
   showProgressBar : true,
   warnAt : 10,
   maxlength : 256,
+  countDirection : 'up',
 
   classes : {
     main : 'tally',

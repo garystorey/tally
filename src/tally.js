@@ -10,25 +10,21 @@ var Tally = function( elm, options ) {
 Tally.prototype = {
 
   init : function ( options ) {
-
     this.type = 'Tally';
     this._setOptions ( options );
     this.$el.data('Tally', this);
-    this._events = 'focusin.tally focusout.tally keyup.tally keydown.tally input.tally paste.tally',
+    this._events = 'focusin.tally focusout.tally keyup.tally keydown.tally input.tally paste.tally';
     this._buildTallyObject();
     this._bindEvents();
-
     return this.$el;
   },
 
   destroy : function () {
-
     if ( this._initialized ) {
         this.$tally.remove();
         this.$tally = undefined;
         this.$el.off('.tally');
     }
-
   },
 
   _setOptions : function ( options ) {
@@ -94,6 +90,7 @@ Tally.prototype = {
         this.$el.trigger( evt );
     }
   },
+
   _hasWarning : function () {
     return (this.$tally.hasClass( this.options.classes.warning ));
   },
@@ -264,7 +261,6 @@ _pad : function ( num, len, achar ) {
   return num;
 }
 
-
 };
 
 jQuery.fn.tally = function( options ) {
@@ -286,7 +282,6 @@ jQuery.fn.tally = function( options ) {
     }
   }
 };
-
 
 jQuery.fn.tally.defaults = {
 
