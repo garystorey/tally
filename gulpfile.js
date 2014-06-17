@@ -16,18 +16,17 @@ gulp.task('clean', function() {
 
 
 gulp.task('test', function() {
-  return gulp.src('dist/*.js','./test/tally.html')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'))
-    .pipe(jshint.reporter('fail'))
-	.pipe(qunit())
+  return gulp.src('./test/tally.html')
+	  .pipe(qunit())
     .pipe(notify('JavaScript test finished!'));	
 });
 
 
-gulp.task('js',['clean','test'], function() {
+gulp.task('js', function() {
 
   return gulp.src(jsPath.jsSrc)
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('jshint-stylish'))
     .pipe(stripDebug())
     .pipe(gulp.dest(jsPath.jsDest))
     .pipe(uglify())
@@ -41,4 +40,4 @@ gulp.task('watch', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['js','watch']);
+gulp.task('default', ['watch']);
