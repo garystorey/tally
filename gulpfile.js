@@ -1,42 +1,29 @@
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var clean = require('gulp-clean');
-var rename = require('gulp-rename');
-var jshint = require('gulp-jshint');
-var stripDebug = require('gulp-strip-debug');
-var notify = require('gulp-notify');
-var qunit = require('gulp-qunit');
+var gulp = require('gulp'),
+    $ = require('gulp-load-plugins')(),
+    cfg = require('./config')();
 
-var jsPath = {jsSrc:['./libs/jquery/jquery.min.js','./src/**/*.js'], jsDest:'./dist'};
-
-gulp.task('clean', function() {
-  return gulp.src('dist/*.js',{read:false})
-	.pipe(clean());
-});
-
+console.log(cfg);
 
 gulp.task('test', function() {
-  return gulp.src('./test/tally.html')
-	  .pipe(qunit())
-    .pipe(notify('JavaScript test finished!'));	
+  return gulp.src(cfg.testpage)
+    .pipe($.qunit())
+    .pipe($.notify('JavaScript test finished!'));
 });
-
 
 gulp.task('js', function() {
 
-  return gulp.src(jsPath.jsSrc)
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(stripDebug())
-    .pipe(gulp.dest(jsPath.jsDest))
-    .pipe(uglify())
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(gulp.dest(jsPath.jsDest))
-    .pipe(notify('JavaScript build finished!'));
+  return gulp.src(cfg.source)
+    .pipe($.jshint())
+    .pipe($.jshint.reporter('jshint-stylish'))
+    .pipe(gulp.dest(cfg.destination))
+    .pipe($.uglify())
+    .pipe($.rename(cfg.rename))
+    .pipe(gulp.dest(cfg.destination))
+    .pipe($.notify('JavaScript build finished!'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(jsPath.jsSrc, ['js']);
+  gulp.watch(cfg.source, ['js']);
 });
 
 // The default task (called when you run `gulp` from cli)
