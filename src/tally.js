@@ -100,41 +100,37 @@
 
     _updateClasses : function(event) {
 
-      var el = event.target, etype = event.type,
-      warn = this.options.warnAt, dir = this.options.countDirection,
-      count = this._countChars(), max = this.options.maxlength;
+      var $el = $(event.target), etype = event.type, opts = this.options,
+      warn = opts.warnAt, dir = opts.countDirection, cls = opts.classes,
+      count = this._countChars(), max = opts.maxlength;
 
       if (etype === 'focusout') {
-        $(el).removeClass(this.options.classes.field);
+        $el.removeClass(cls.field);
       }
 
-      if (dir === 'up' && count < (max - warn)) {
-        if (this._hasWarning()) { this._fireEvent('pass'); }
-        $(el).removeClass(this.options.classes.field);
-        this.$tally.removeClass(this.options.classes.warning);
+      this._fireEvent((this._hasWarning()) ? 'pass' : 'warning');
+
+      if (dir === 'up') {
+        if (count < (max - warn)) {
+          $el.removeClass(cls.field);
+          this.$tally.removeClass(cls.warning);
+          return;
+        }
+        $el.addClass(cls.field);
+        this.$tally.addClass(cls.warning);
         return;
       }
 
-      if (dir === 'up' && count >= (max - warn)) {
-        if (!this._hasWarning()) { this._fireEvent('warning'); }
-        $(el).addClass(this.options.classes.field);
-        this.$tally.addClass(this.options.classes.warning);
+      if (count <= warn) {
+        $el.addClass(cls.field);
+        this.$tally.addClass(cls.warning);
         return;
       }
 
-      if (dir === 'down' && count <= warn) {
-        if (!this._hasWarning()) { this._fireEvent('warning'); }
-        $(el).addClass(this.options.classes.field);
-        this.$tally.addClass(this.options.classes.warning);
-        return;
-      }
+      $el.removeClass(this.options.classes.field);
+      this.$tally.removeClass(this.options.classes.warning);
+      return;
 
-      if (dir === 'down' && count >= warn) {
-        if (this._hasWarning()) { this._fireEvent('pass'); }
-        $(el).removeClass(this.options.classes.field);
-        this.$tally.removeClass(this.options.classes.warning);
-        return;
-      }
     },
 
     _buildText : function() {
@@ -212,13 +208,13 @@
           tHeight = this.$tally.outerHeight();
 
       switch (posX) {   // Set X-axis coordinate
-        case "left" :      // Set to the left side of object
+        case 'left' :      // Set to the left side of object
           x = oLeft;
           break;
-        case "center" :    // Set to the center of object
+        case 'center' :    // Set to the center of object
           x = oLeft + (oWidth / 2) - (tWidth / 2);
           break;
-        case "right" :    // Set to the right side of object
+        case 'right' :    // Set to the right side of object
           x = oLeft + oWidth - tWidth + 6;
           break;
         default:     // Set to the given number
@@ -226,13 +222,13 @@
       }
 
       switch (posY) {     // Set Y-axis coordinate
-        case "top" :    // Set to the top of object
+        case 'top' :    // Set to the top of object
           y = oTop - tHeight - 8;
           break;
-        case "center" :    // Set to the center of object
+        case 'center' :    // Set to the center of object
           y = oTop + (oHeight / 2) - (tHeight / 2);
           break;
-        case "bottom" :    // Set to the bottom of object
+        case 'bottom' :    // Set to the bottom of object
           y = oTop + oHeight + 7;
           break;
         default:     // Set to the given number
@@ -241,11 +237,11 @@
 
       // Because these combinations will overlap the ends of the textbox
       // we will move to right outside of it
-      if (posX === "left" && posY === "center") { x -= (tWidth + 13); }
-      if (posX === "right" && posY === "center") { x += (tWidth + 12); }
+      if (posX === 'left' && posY === 'center') { x -= (tWidth + 13); }
+      if (posX === 'right' && posY === 'center') { x += (tWidth + 12); }
 
-      if (typeof posXo === "number")     { x += parseInt(posXo, 10); }
-      if (typeof posYo === "number")     { y += parseInt(posYo, 10); }
+      if (typeof posXo === 'number')     { x += parseInt(posXo, 10); }
+      if (typeof posYo === 'number')     { y += parseInt(posYo, 10); }
 
       //Set the coordinates
       this.$tally.css({top: y, left: x});
