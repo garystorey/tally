@@ -31,12 +31,18 @@
   },
 
   _setOptions : function(options) {
-    var isData = this.$el.data('tally');
+    var isData = this.$el.data('tally'),
+        max = this.$el.attr('maxlength'),
+        opts;
+
     this.options = $.extend(true, {}, $.fn.tally.defaults, options);
-    if (isData) { this.options = $.extend(true, {}, this.options , isData); }
-    this.options.maxlength = (this.$el.attr('maxlength')) ? this.$el.attr('maxlength') - 0 : this.options.maxlength - 0;
-    this.options.countDirection = this.options.countDirection.toLowerCase();
-    if ('updown'.indexOf(this.options.countDirection) === -1) { this.options.countDirection = 'up'; }
+    if (isData) {
+      this.options = $.extend(true, {}, this.options , isData);
+    }
+    opts = this.options;
+    this.options.maxlength = (max) ? max - 0 : opts.maxlength - 0;
+    this.options.countDirection = opts.countDirection.toLowerCase();
+    if ('updown'.indexOf(opts.countDirection) === -1) { this.options.countDirection = 'up'; }
   },
 
   _bindEvents : function() {
@@ -88,10 +94,7 @@
   },
 
   _fireEvent : function(type) {
-    var evt = (type === 'warning') ? 'tallyWarning' : 'tallyPass';
-    if (this.$tally.hasClass(this.options.classes.warning)) {
-      this.$el.trigger(evt);
-    }
+    this.$el.trigger((type === 'warning') ? 'tallyWarning' : 'tallyPass');
   },
 
   _hasWarning : function() {
@@ -101,44 +104,36 @@
   _updateClasses : function(event) {
 
     var $el = $(event.target), etype = event.type, opts = this.options,
-    warn = opts.warnAt, dir = opts.countDirection, cls = opts.classes,
-    count = this._countChars(), max = opts.maxlength;
+    warn = opts.warnAt, dir = opts.countDirection, fld = opts.classes.field,
+    count = this._countChars(), max = opts.maxlength, check;
 
     if (etype === 'focusout') {
-      $el.removeClass(cls.field);
+      $el.removeClass(fld);
     }
 
     this._fireEvent((this._hasWarning()) ? 'pass' : 'warning');
 
-    if (dir === 'up') {
-      if (count < (max - warn)) {
-        $el.removeClass(cls.field);
-        this.$tally.removeClass(cls.warning);
-        return;
-      }
-      $el.addClass(cls.field);
-      this.$tally.addClass(cls.warning);
-      return;
-    }
-
-    if (count <= warn) {
-      $el.addClass(cls.field);
-      this.$tally.addClass(cls.warning);
-      return;
-    }
-
-    $el.removeClass(this.options.classes.field);
-    this.$tally.removeClass(this.options.classes.warning);
+    check = (dir === 'up') ? (count < (max - warn)) : (count > warn);
+    this._setClasses($el, (check) ? 'remove' : 'add');
     return;
   },
 
+  _setClasses : function( el, method) {
+    var opts = this.options.classes;
+    method = (method === 'add') ? 'addClass' : 'removeClass';
+    el[method](opts.field);
+    this.$tally[method](opts.warning);
+  },
+
   _buildText : function() {
-    var pattern = this.options.pattern,
+    var opts = this.options,
+        pattern = opts.pattern,
+        max = opts.maxlength,
         words = this._countWords(),
         count = this._pad(this._countChars()),
-        percent = this._getPercentage(count, this.options.maxlength);
+        percent = this._getPercentage(count, max);
     pattern = pattern.replace('{{c}}', count)
-      .replace('{{m}}', this.options.maxlength)
+      .replace('{{m}}', max)
       .replace('{{w}}', words)
       .replace('{{p}}', this._pad(percent, 3));
 
@@ -146,11 +141,13 @@
   },
 
   _countChars : function() {
-    return (this.options.countDirection === 'down') ? this.options.maxlength - this.$el.val().length : this.$el.val().length;
+    var chars = this.$el.val().length, opts = this.options;
+    return (opts.countDirection === 'down') ? opts.maxlength - chars : chars;
   },
 
   _getPercentage: function(curr, max) {
-    return (this.options.countDirection === 'down') ? 100 - (parseInt(Math.floor((curr / max) * 100) , 10)) : parseInt(Math.floor((curr / max) * 100) , 10);
+    var num = parseInt(Math.floor((curr / max) * 100) , 10);
+    return (this.options.countDirection === 'down') ? 100 - num : num;
   },
 
   _countWords : function() {
@@ -194,10 +191,11 @@
 
     var x = 0,
         y = 0,
-        posX = this.options.position.x,
-        posY = this.options.position.y,
-        posXo = parseInt(this.options.position.offsetX, 10),
-        posYo = parseInt(this.options.position.offsetY, 10),
+        pos = this.options.position,
+        posX = pos.x,
+        posY = pos.y,
+        posXo = parseInt(pos.offsetX, 10),
+        posYo = parseInt(pos.offsetY, 10),
         oLeft = this.$el.offset().left,
         oWidth = this.$el.width(),
         oTop = this.$el.offset().top,
@@ -289,21 +287,21 @@
     countDirection : 'up',
 
     classes : {
-    main : 'tally',
-    text : 'tally-text',
-    progressBar : 'tally-progressBar',
-    warning : 'tally-warning',
-    field : 'tally-fieldWarning'
-  },
+      main : 'tally',
+      text : 'tally-text',
+      progressBar : 'tally-progressBar',
+      warning : 'tally-warning',
+      field : 'tally-fieldWarning'
+    },
 
     setPosition : true,
     position : {
-    zIndex : 100,
-    x : 'right',
-    y : 'bottom',
-    offsetX: 0,
-    offsetY: 0
-  }
+      zIndex : 100,
+      x : 'right',
+      y : 'bottom',
+      offsetX: 0,
+      offsetY: 0
+    }
   };
 
 }(jQuery));
