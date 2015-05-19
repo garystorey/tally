@@ -15,9 +15,10 @@
   "immed": true,
   "expr": true,
   "latedef": "nofunc",
-  "quotmark": "single",
+  "quotmark": "double",
   "indent": 2,
   "node": true,
   "qunit": true,
-  "browser":true
+  "browser":true,
+  "smarttabs": true
 }
