@@ -58,25 +58,26 @@
   _bindEvents: function() {
     var self = this,
         opts = self.options,
-        evts = self._events;
+        evts = self._events,
+        $t = self.$tally,
+        $tt = self.$tallyText;
 
     self.$el.on( evts, function( evt ) {
 
       switch ( evt.type ) {
 
         case "focusin":
-          self.$tallyText.text( self._buildText() );
-          self.$tally.addClass( opts.classes.main );
-          self.$tally.show();
+          $t.addClass( opts.classes.main ).show();
+          $tt.text( self._buildText() );
           break;
 
         case "focusout":
-          self.$tally.removeClass( opts.classes.main + " " + opts.classes.warning ).hide();
-          self.$tallyText.text( "" );
+          $t.removeClass( opts.classes.main + " " + opts.classes.warning ).hide();
+          $tt.text( "" );
           break;
 
         default:
-          self.$tallyText.text( self._buildText() );
+          $tt.text( self._buildText() );
       }
 
       self._updateClasses( evt );
