@@ -45,38 +45,34 @@
     if ( "updown".indexOf( opts.countDirection ) === -1 ) { this.options.countDirection = "up"; }
   },
 
+  _updateTally: function( event ) {
+    var opts = this.options;
+    var pos = ( event === "focusout" ) ? "static" : "relative";
+    var pos2 = ( event === "focusout" ) ? "static" : "absolute";
+    this.$tally.css( { "position": pos2, "zIndex": opts.position.zIndex } );
+    this.$tallyBar.css( { "position": pos, "zIndex": opts.position.zIndex + 1 } );
+    this.$tallyText.css( { "position": pos, "zIndex": opts.position.zIndex + 2 } );
+    this._setXY();
+  },
+
   _bindEvents: function() {
     var self = this,
         opts = self.options,
         evts = self._events;
 
     self.$el.on( evts, function( evt ) {
+
       switch ( evt.type ) {
 
         case "focusin":
-
           self.$tallyText.text( self._buildText() );
           self.$tally.addClass( opts.classes.main );
-          if ( opts.setPosition ) {
-            self.$tally.css( { "position":"absolute", "zIndex": opts.position.zIndex } );
-            self.$tallyBar.css( { "position": "relative", "zIndex": opts.position.zIndex + 1 } );
-            self.$tallyText.css( { "position": "relative", "zIndex": opts.position.zIndex + 2 } );
-            self._setXY();
-          }
           self.$tally.show();
-
           break;
 
         case "focusout":
           self.$tally.removeClass( opts.classes.main + " " + opts.classes.warning ).hide();
           self.$tallyText.text( "" );
-
-          if ( opts.setPosition ) {
-            self.$tally.css( { "position":"static", "zIndex":"auto" } );
-            self.$tallyText.css( { "position":"static", "zIndex":"auto" } );
-            self.$tallyBar.css( { "position":"static", "zIndex":"auto" } );
-          }
-
           break;
 
         default:
@@ -85,6 +81,7 @@
 
       self._updateClasses( evt );
       if ( opts.showProgressBar ) { self._updateProgressBar(); }
+      if ( opts.setPosition ) { self._updateTally( evt.type ); }
 
     } );
   },
@@ -107,9 +104,7 @@
     warn = opts.warnAt, dir = opts.countDirection, fld = opts.classes.field,
     count = this._countChars(), max = opts.maxlength, check;
 
-    if ( etype === "focusout" ) {
-      $el.removeClass( fld );
-    }
+    if ( etype === "focusout" ) { $el.removeClass( fld ); }
 
     this._fireEvent( ( this._hasWarning() ) ? "pass" : "warning" );
 
