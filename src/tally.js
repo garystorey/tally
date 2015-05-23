@@ -64,26 +64,24 @@
 
     self.$el.on( evts, function( evt ) {
 
-      switch ( evt.type ) {
+      var eType = evt.type;
 
-        case "focusin":
-          $t.addClass( opts.classes.main ).show();
-          $tt.text( self._buildText() );
-          break;
-
-        case "focusout":
-          $t.removeClass( opts.classes.main + " " + opts.classes.warning ).hide();
-          $tt.text( "" );
-          break;
-
-        default:
-          $tt.text( self._buildText() );
+      if ( eType.indexOf( "focus" ) > -1 ) {
+        self._setClasses( $t, "add" );
       }
+
+      if ( eType.indexOf( "focus" ) > -1) {
+        if ( eType === "focusin" ) {
+          $t.addClass( opts.classes.main ).show();
+        } else {
+          $t.removeClass( opts.classes.main + " " + opts.classes.warning ).hide();
+        }
+      }
+      $tt.text( eType === "focusout" ? "" : self._buildText() );
 
       self._updateClasses( evt );
       if ( opts.showProgressBar ) { self._updateProgressBar(); }
       if ( opts.setPosition ) { self._updateTally( evt.type ); }
-
     } );
   },
 
@@ -127,12 +125,13 @@
         max = opts.maxlength,
         words = this._countWords(),
         count = this._pad( this._countChars() ),
-        percent = this._getPercentage( count, max );
+        percent = this._getPercentage( count, max ),
+        remaining = max-count;
     pattern = pattern.replace( "{{c}}", count )
       .replace( "{{m}}", max )
+      .replace( "{{r}}", remaining )
       .replace( "{{w}}", words )
       .replace( "{{p}}", this._pad( percent, 3 ) );
-
     return pattern;
   },
 
