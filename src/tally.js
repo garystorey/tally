@@ -127,7 +127,7 @@
         .replace( "{{m}}", max )
         .replace( "{{r}}", remaining )
         .replace( "{{w}}", words )
-        .replace( "{{p}}", this._pad( percent, 3, "" ) );
+        .replace( "{{p}}", this._pad( percent, 3 ), "" );
       return pattern;
     },
 
