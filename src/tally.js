@@ -15,12 +15,15 @@
     init: function( options ) {
       this.type = "Tally";
       this._setOptions ( options );
-      this._events = "focusin.tally focusout.tally keyup.tally keydown.tally input.tally paste.tally";
-      this._buildTallyObject();
-      this._bindEvents();
       this.count = 0;
+      this.remaining = 0;
+      this.max = 0;
+      this.percent = 0;
       this.x = 0;
       this.y = 0;
+      this._events = "focusin.tally focusout.tally keyup.tally input.tally paste.tally";
+      this._buildTallyObject();
+      this._bindEvents();
       this.$el.data( "Tally", this );
       return this.$el;
     },
